@@ -132,12 +132,11 @@ If you use a variable that is neither declared in the file nor in the scope you 
 
 ## Installation
 
-The code is really short so you can simply use it in a project by copying the *MiniTemple/\_\_init\_\_.py* file to your project.
+There is three ways to go :
 
-Also it is possible to install it from PyPI with
-```
-pip install MiniTemple
-```
+1) The standard python way : use `pip install MiniTemple`
+2) The git way : use `git clone https://github.com/Lattay/MiniTemple` in your project.
+3) The brutal way : copy the *MiniTemple* directory to your project.
 
 ## Usage
 
@@ -151,7 +150,7 @@ print(t.render({'a_variable' : 5, 'another' : 'someValue'})
 print(t.render({'a_variable' : 0, 'another' : 'someOtherValue'})
 ```
 
-You can also use it in command line mode.
+You can also use it in command line mode if you installed it with method 1 or 3.
 The *-s* option allow you to provide a key/value pair for the scope. You can add as many as you want.
 If possible the value will be converted to int or float or bool (if it match True or False). If no type match
 the value will be passed as a string. The *-t* option allow you to provide the two tags you want to use.
