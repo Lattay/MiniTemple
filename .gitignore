@@ -1,0 +1,7 @@
+test.mt
+some_file
+some_other_file
+build
+dist
+MiniTemple.egg-info
+__pycache__
