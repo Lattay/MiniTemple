@@ -1,5 +1,6 @@
 import re
 import os
+from sys import stderr
 
 name = 'MiniTemple'
 
@@ -16,15 +17,18 @@ class Template:
         """
             Optional arguments :
             file : a filename in a string (default None)
-            text : a text in a string to be compile as a template (default None)
+            text : a text in a string to be compiled as a template (default None)
             caching : a boolean that enable loading already compiled template from cache (default True)
-            tags : a tuple with the opening and closings tags (strings) (default ('<%', '%>')
+            tags : a tuple with the opening and closings tags (strings) (default ('<%', '%>'))
+            debug : a bool enabling printing the python code to be interpreted to produce the rendered \
+output (default False)
         """
         # get options
         self.file = args.get('file', None)
         self.text = args.get('text', None)
         self.caching = args.get('caching', True)
         self.tags = args.get('tags', self.tags)
+        self.debug = args.get('debug', False)
         self.__basedir = None
         self.__src = None
         self.__output = []
@@ -78,7 +82,9 @@ class Template:
         # use cached code if it exists and is up to date
         if self.caching and self.__hash in self.__cache \
                 and self.__cache[self.__hash][0] == self.__mtime:
-            self.__code = self.__cache[self.file][1]
+            self.__code = self.__cache[self.__hash][1]
+            if self.debug:
+                print('Code loaded from cache', file=stderr)
         # compile
         else:
             if self.file:
@@ -90,6 +96,8 @@ class Template:
             code = ''.join(self.__parse())
             self.__code = compile(code, filename, 'exec')
             self.__cache[self.__hash] = (self.__mtime, self.__code)
+            if self.debug:
+                print(code, file=stderr)
 
         return self
 
@@ -125,7 +133,7 @@ class Template:
                 offset = []
                 for line in codelines:
                     sline = line.lstrip()
-                    if sline == '':
+                    if sline.rstrip() == '':
                         pass
                     elif sline.startswith('#'):
                         if sline.rstrip() == '#end':
@@ -146,6 +154,15 @@ class Template:
                     elif sline.startswith('='):
                         rawcode.append(indent_lvl * self.indent)
                         rawcode.append('write(' + sline[1:] + ')\n')
+
+                    elif (sline.startswith('else') and sline.rstrip().endswith(':'))\
+                            or (sline.startswith('elif') and sline.rstrip().endswith(':')):
+                        if indent_lvl < 1:
+                            raise SyntaxError(
+                                'Unexpected else or elif in snippet "' + sline + '".'
+                            )
+                        rawcode.append((indent_lvl-1)*self.indent)
+                        rawcode.append(sline + '\n')
 
                     else:
                         if len(offset) == 0:

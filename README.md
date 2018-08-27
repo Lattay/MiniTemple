@@ -91,6 +91,40 @@ That can be important for loops for example. If you want to produce a HTML list,
 
 If you omit the final #end every thing else will also be in the for loop.
 
+Note that if a line is a `else` or `elif` clause it is detected and the indentation is
+decremented so you would __not__ write the following :
+
+```
+<% if a_bool: %>
+OK
+<% #end
+   else: %>
+Nope
+```
+
+but the more intuitive
+
+```
+<% if a_bool: %>
+OK
+<% else: %>
+Nope
+```
+
+In case of nested __if__ blocks you have to use __#end__ to unindent the outer block:
+
+```
+<% if a_bool: %>
+<%   if another_bool: %>
+Here both a_bool and another_bool are true
+<%   else: %>
+Here a_bool is true but not another_bool
+<% #end %>
+<% else:
+# the #end close the inner if block explicitely so the else is associated to the outer if %>
+Here no bool are true
+```
+
 ## The scope
 
 When you render a template you have to provide a scope wich will be used for execution of python code. 
