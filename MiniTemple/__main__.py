@@ -28,6 +28,7 @@ parser.add_argument('--tags', '-t', action='store', nargs=2, default=None)
 parser.add_argument('--output', '-o', action='store', default='-')
 
 parser.add_argument('--scope', '-s', action='append', nargs=2)
+parser.add_argument('--debug', '-d', action='store_true', default=False)
 
 
 options = parser.parse_args(argv[1:])
@@ -37,22 +38,27 @@ filename = options.filename
 
 scope = {}
 
-for key, value in options.scope:
-    if value == 'True':
-        value = True
-    elif value == 'False':
-        value = False
-    elif value == 'None':
-        value = None
-    elif isint(value):
-        value = int(value)
-    elif isfloat(value):
-        value = float(value)
-    scope[key] = value
+if options.scope:
+    for key, value in options.scope:
+        if value == 'True':
+            value = True
+        elif value == 'False':
+            value = False
+        elif value == 'None':
+            value = None
+        elif isint(value):
+            value = int(value)
+        elif isfloat(value):
+            value = float(value)
+        scope[key] = value
+
 
 opt_d = {}
 if options.tags:
     opt_d = options.tags
+
+if options.debug:
+    opt_d['debug'] = True
 
 if outfilename == '-':
     if filename == '-':
