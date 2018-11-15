@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="MiniTemple",
-    version="0.2.1",
+    version="0.2.2",
     author="Theo (Lattay) Cavignac",
     author_email="theo.cavignac@gmail.com",
     description="A simple general purpose templating engine",
