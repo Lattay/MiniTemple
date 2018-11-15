@@ -1,4 +1,4 @@
-from MiniTemple.MiniTemple import (
+from .MiniTemple import (
     Template,
     compile_text,
     compile_file,
