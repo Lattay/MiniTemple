@@ -9,13 +9,18 @@ The default tags are `<%` and `%>` but can be easily replaced with any string of
 As a simple pure python program it should be fully compatible with any interpreter for Python 3.
 Also any valid Python 3 code can be embed into the templates.
 
+## Disclaimer
+
+This is a work in progress and my change and be buggy. Feel free to open an issue
+or fork the project. This software is distributed as is without any kind of guaranties.
+
 
 ## Printing text
 
 There is three way to output text from a template :
 - Outside of the tags everything is printed without modification with the exception 
-of the escaped tags `\\<%` and `\\%>` wich are just tags on output
-- Inside of the tags you can use the direct output : a '=' as the first non blank 
+of the escaped tags `\<%` and `\%>` wich are just tags on output
+- Inside of the tags you can use the direct output : a `=` as the first non blank 
 character of a line or of a code block will automatically output the evaluation 
 of the rest of the line
 - Inside of the tags you can explicitely use the python functions `echo` and `write`
@@ -28,7 +33,7 @@ newline at the end.
 
 You can include other templates into the current one with the #include directive
 followed by any number of file names separated by spaces. The file names are 
-not strings, do not use " or '. If a filename is a relative path it it taken
+not strings, do not use `"` or `'`. If a filename is a relative path it it taken
 relatively to the file being compiled. Absolute path are also valid. The 
 included files are loaded in order of apparition and inherit from the level of 
 indentation of the parent wich means that if you write :
@@ -121,7 +126,7 @@ OK
 Nope
 ```
 
-In case of nested __if__ blocks you have to use __#end__ to unindent the outer block:
+In case of nested `if` blocks you have to use `#end` to unindent the outer block:
 
 ```
 <% if a_bool: %>
